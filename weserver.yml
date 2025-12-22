@@ -1,0 +1,27 @@
+---
+- name: Configure the webserver 
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: install httpd package 
+      yum:
+        name: httpd
+        state: present
+    - name: create index.html and copy the /var/www/html 
+      copy:
+        content: "This is werserver"
+        dest: /var/www/html/index.html
+    - name: restart the service of httpd
+      service:
+        name: httpd
+        state: started
+        enabled: true
+    - name: add service in firewalld
+      firewalld:
+        service: http
+        permanent: true
+        immediate: true
+        state: enabled
+    - name: Reload firewalld to apply changes
+      command: firewall-cmd --reload
+      become: yes

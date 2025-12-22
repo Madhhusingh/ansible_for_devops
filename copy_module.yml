@@ -1,0 +1,9 @@
+---
+- name: copy module
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: copy the file from source to destination
+      copy:
+        content: "Welcome to madhu singh, i am learning ansible from basic to advanced"
+        dest: /root/welcome.txt
