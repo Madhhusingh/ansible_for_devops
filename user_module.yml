@@ -1,0 +1,34 @@
+--- 
+- name: user module example
+  hosts: dc1
+  tasks:
+    - name: Creating multiple group
+      group:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - developers
+        - dev1
+    - name: Create user with home, shell, and primary group
+      user:
+        name: madhusingh
+        shell: /bin/bash
+        group: dev1
+        create_home: yes
+        home: /home/madhusingh
+        state: present
+    - name: add in group
+      user:
+        name: madhusingh
+        groups: developers, wheel
+        append: yes
+
+    - name: Deleting user
+      user:
+        name: madhusingh
+        state: absent
+        remove: yes
+        force: yes
+  
+      
+        

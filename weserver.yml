@@ -4,24 +4,39 @@
   gather_facts: yes
   tasks:
     - name: install httpd package 
-      yum:
-        name: httpd
-        state: present
+      yum: 
+        name: 
+          - httpd
+          - firewalld
+        state: latest
     - name: create index.html and copy the /var/www/html 
       copy:
         content: "This is werserver"
         dest: /var/www/html/index.html
+    - name: restart the service of firewalld
+      service:
+        name: firewalld
+        state: started
+        enabled: true
     - name: restart the service of httpd
       service:
         name: httpd
         state: started
         enabled: true
+
     - name: add service in firewalld
       firewalld:
         service: http
         permanent: true
-        immediate: true
+        immediate: yes
         state: enabled
     - name: Reload firewalld to apply changes
       command: firewall-cmd --reload
-      become: yes
+- name: testing my deplyment 
+  hosts: localhost
+  tasks:
+    - name: testing the webserver
+      uri:
+        url: http://node1.css.com
+        return_content: yes
+        status_code: 200
